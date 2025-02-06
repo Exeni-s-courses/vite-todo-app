@@ -49,11 +49,16 @@ export const App = (elementId) => {
     });
 
     todoListUl.addEventListener('click', (event) => {
-        if(event.target.getAttribute('class') === 'destroy'){
-            const element = event.target.closest('[data-id]');
-            todoStore.deleteTodo(element.getAttribute('data-id'));
-            displayTodos();
-        };
+        const isDestroyElement = event.target.className === 'destroy';
+        const element = event.target.closest('[data-id]');
+        if (!element || !isDestroyElement) return;
+        todoStore.deleteTodo(element.getAttribute('data-id'));
+        displayTodos();
+        // if(event.target.getAttribute('class') === 'destroy'){
+        //     const element = event.target.closest('[data-id]');
+        //     todoStore.deleteTodo(element.getAttribute('data-id'));
+        //     displayTodos();
+        // };
     });
 
 }
