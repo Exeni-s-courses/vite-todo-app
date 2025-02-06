@@ -6,6 +6,7 @@ const ElementIDs = {
     TodoList: '.todo-list',
     NewTodoInput: '#new-todo-input',
     DestroyButton: '.destroy',
+    ClearCompleted: '.clear-completed'
 }
 
 /**
@@ -30,7 +31,7 @@ export const App = (elementId) => {
     // Referencias HTML
     const newDescriptionInput = document.querySelector(ElementIDs.NewTodoInput);
     const todoListUl = document.querySelector(ElementIDs.TodoList);
-    const todoDestroyButton = document.querySelector(ElementIDs.DestroyButton);
+    const todoClearCompleted = document.querySelector(ElementIDs.ClearCompleted);
 
     // Listeners
     newDescriptionInput.addEventListener('Keyup', (event) => {
@@ -59,6 +60,11 @@ export const App = (elementId) => {
         //     todoStore.deleteTodo(element.getAttribute('data-id'));
         //     displayTodos();
         // };
+    });
+
+    todoClearCompleted.addEventListener('click', (event) => {
+        todoStore.deleteCompleted();
+        displayTodos();
     });
 
 }
