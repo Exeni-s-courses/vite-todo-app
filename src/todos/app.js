@@ -1,4 +1,4 @@
-import todoStore from '../store/todo.store';
+import todoStore, { Filters } from '../store/todo.store';
 import html from './app.html?raw';
 import { renderTodos } from './use-cases';
 
@@ -6,7 +6,8 @@ const ElementIDs = {
     TodoList: '.todo-list',
     NewTodoInput: '#new-todo-input',
     DestroyButton: '.destroy',
-    ClearCompleted: '.clear-completed'
+    ClearCompleted: '.clear-completed',
+    TodoFilters: '.filtro',
 }
 
 /**
@@ -32,6 +33,7 @@ export const App = (elementId) => {
     const newDescriptionInput = document.querySelector(ElementIDs.NewTodoInput);
     const todoListUl = document.querySelector(ElementIDs.TodoList);
     const todoClearCompleted = document.querySelector(ElementIDs.ClearCompleted);
+    const filtersLis = document.querySelectorAll(ElementIDs.TodoFilters);
 
     // Listeners
     newDescriptionInput.addEventListener('Keyup', (event) => {
@@ -55,16 +57,32 @@ export const App = (elementId) => {
         if (!element || !isDestroyElement) return;
         todoStore.deleteTodo(element.getAttribute('data-id'));
         displayTodos();
-        // if(event.target.getAttribute('class') === 'destroy'){
-        //     const element = event.target.closest('[data-id]');
-        //     todoStore.deleteTodo(element.getAttribute('data-id'));
-        //     displayTodos();
-        // };
     });
 
     todoClearCompleted.addEventListener('click', (event) => {
         todoStore.deleteCompleted();
         displayTodos();
     });
+
+    filtersLis.forEach(element => {
+        element.addEventListener('click', (element) => {
+            filtersLis.forEach(el => el.classList.remove('selected'));
+            element.target.classList.add('selected');
+
+            switch (element.target.text) {
+                case 'Todos':
+                    todoStore.setFilter(Filters.All);
+                    break;
+                case 'Pendientes':
+                    todoStore.setFilter(Filters.Pending);
+                    break;
+                case 'Completados':
+                    todoStore.setFilter(Filters.Completed);
+                    break;
+            }
+
+            displayTodos();
+        })
+    })
 
 }
